@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedTrack Pro — Pharmacy Expiry Tracker</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- SIDEBAR NAV -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">Med<span>Track</span> <em>Pro</em></div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item active" data-page="dashboard">
+        <span class="nav-icon">📊</span> Dashboard
+      </a>
+      <a href="medicines.html" class="nav-item" data-page="medicines">
+        <span class="nav-icon">💊</span> Medicines
+      </a>
+      <a href="alerts.html" class="nav-item" data-page="alerts">
+        <span class="nav-icon">🔔</span> Alerts
+        <span class="nav-badge" id="alertBadge">0</span>
+      </a>
+      <a href="reports.html" class="nav-item" data-page="reports">
+        <span class="nav-icon">📋</span> Reports
+      </a>
+      <a href="settings.html" class="nav-item" data-page="settings">
+        <span class="nav-icon">⚙️</span> Settings
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="pharmacy-name" id="sidebarPharmacyName">My Pharmacy</div>
+      <div class="sidebar-version">v2.0.0</div>
+    </div>
+  </aside>
+
+  <!-- MOBILE TOGGLE -->
+  <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-layout">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-sub" id="todayDate"></p>
+      </div>
+      <a href="medicines.html" class="btn-primary">+ Add Medicine</a>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <!-- CHART + EXPIRING SOON -->
+    <div class="two-col">
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Expiry Overview</span>
+          <span class="card-sub">By category</span>
+        </div>
+        <div class="donut-wrap">
+          <canvas id="donutChart" width="200" height="200"></canvas>
+          <div class="donut-center" id="donutCenter">
+            <div class="donut-num" id="donutTotal">0</div>
+            <div class="donut-label">Total</div>
+          </div>
+        </div>
+        <div class="legend" id="chartLegend"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">⚠ Expiring in 30 Days</span>
+          <a href="alerts.html" class="card-link">View all →</a>
+        </div>
+        <div id="expiringList" class="expiring-list"></div>
+      </div>
+
+    </div>
+
+    <!-- RECENTLY ADDED -->
+    <div class="card" style="margin-top:20px">
+      <div class="card-header">
+        <span class="card-title">Recently Added</span>
+        <a href="medicines.html" class="card-link">View all →</a>
+      </div>
+      <div id="recentTable"></div>
+    </div>
+
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/db.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
