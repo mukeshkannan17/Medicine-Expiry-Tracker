@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reports — MedTrack Pro</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">Med<span>Track</span> <em>Pro</em></div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+      <a href="medicines.html" class="nav-item"><span class="nav-icon">💊</span> Medicines</a>
+      <a href="alerts.html" class="nav-item"><span class="nav-icon">🔔</span> Alerts <span class="nav-badge" id="alertBadge">0</span></a>
+      <a href="reports.html" class="nav-item active"><span class="nav-icon">📋</span> Reports</a>
+      <a href="settings.html" class="nav-item"><span class="nav-icon">⚙️</span> Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="pharmacy-name" id="sidebarPharmacyName">My Pharmacy</div>
+      <div class="sidebar-version">v2.0.0</div>
+    </div>
+  </aside>
+
+  <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+  <div class="main-layout">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Reports</h1>
+        <p class="page-sub">Inventory analysis and export tools</p>
+      </div>
+      <button class="btn-primary" onclick="printReport()">🖨 Print Report</button>
+    </div>
+
+    <!-- REPORT CARDS -->
+    <div class="report-grid" id="reportGrid"></div>
+
+    <!-- CATEGORY BREAKDOWN -->
+    <div class="two-col" style="margin-top:20px">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">By Category</span>
+        </div>
+        <div id="categoryBreakdown"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Inventory Value</span>
+        </div>
+        <div id="inventoryValue"></div>
+      </div>
+    </div>
+
+    <!-- FULL EXPORT -->
+    <div class="card" style="margin-top:20px">
+      <div class="card-header">
+        <span class="card-title">Export Options</span>
+      </div>
+      <div class="export-options">
+        <button class="export-card" onclick="exportAll()">
+          <div class="export-icon">📄</div>
+          <div class="export-label">Full Inventory CSV</div>
+          <div class="export-desc">All medicines with all fields</div>
+        </button>
+        <button class="export-card" onclick="exportExpired()">
+          <div class="export-icon">🔴</div>
+          <div class="export-label">Expired Only CSV</div>
+          <div class="export-desc">All expired medicines</div>
+        </button>
+        <button class="export-card" onclick="exportExpiringSoon()">
+          <div class="export-icon">🟡</div>
+          <div class="export-label">Expiring Soon CSV</div>
+          <div class="export-desc">Medicines expiring in 30 days</div>
+        </button>
+        <button class="export-card" onclick="exportLowStock()">
+          <div class="export-icon">📦</div>
+          <div class="export-label">Low Stock CSV</div>
+          <div class="export-desc">Medicines with qty ≤ 10</div>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/db.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/reports.js"></script>
+</body>
+</html>

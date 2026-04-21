@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medicines — MedTrack Pro</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">Med<span>Track</span> <em>Pro</em></div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="nav-item" data-page="dashboard"><span class="nav-icon">📊</span> Dashboard</a>
+      <a href="medicines.html" class="nav-item active" data-page="medicines"><span class="nav-icon">💊</span> Medicines</a>
+      <a href="alerts.html" class="nav-item" data-page="alerts"><span class="nav-icon">🔔</span> Alerts <span class="nav-badge" id="alertBadge">0</span></a>
+      <a href="reports.html" class="nav-item" data-page="reports"><span class="nav-icon">📋</span> Reports</a>
+      <a href="settings.html" class="nav-item" data-page="settings"><span class="nav-icon">⚙️</span> Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="pharmacy-name" id="sidebarPharmacyName">My Pharmacy</div>
+      <div class="sidebar-version">v2.0.0</div>
+    </div>
+  </aside>
+
+  <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+
+  <div class="main-layout">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Medicines</h1>
+        <p class="page-sub">Manage your full inventory</p>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn-secondary" onclick="exportCSV()">⬇ Export CSV</button>
+        <button class="btn-primary" onclick="openModal()">+ Add Medicine</button>
+      </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search name, batch, category..." oninput="renderMedicineTable()" />
+      </div>
+      <div class="filter-btns">
+        <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+        <button class="filter-btn" onclick="setFilter('expired',this)">Expired</button>
+        <button class="filter-btn" onclick="setFilter('warn',this)">Expiring Soon</button>
+        <button class="filter-btn" onclick="setFilter('safe',this)">Safe</button>
+      </div>
+      <select id="categoryFilter" onchange="renderMedicineTable()" class="filter-select">
+        <option value="">All Categories</option>
+      </select>
+    </div>
+
+    <!-- TABLE -->
+    <div class="card" style="padding:0;overflow:hidden">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th onclick="sortMeds('name')">Medicine ↕</th>
+            <th onclick="sortMeds('category')">Category</th>
+            <th onclick="sortMeds('batch')">Batch No.</th>
+            <th onclick="sortMeds('expiry')">Expiry</th>
+            <th onclick="sortMeds('days')">Days Left ↕</th>
+            <th onclick="sortMeds('qty')">Qty ↕</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="medTableBody"></tbody>
+      </table>
+      <div id="emptyState" class="empty-state" style="display:none">
+        <div class="empty-icon">💊</div>
+        <p>No medicines found. Add one to get started.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD/EDIT MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <span id="modalTitle" class="modal-title">Add Medicine</span>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="fId" />
+        <div class="form-row">
+          <div class="field">
+            <label>Medicine Name *</label>
+            <input type="text" id="fName" placeholder="e.g. Paracetamol 500mg" />
+          </div>
+          <div class="field">
+            <label>Category</label>
+            <input type="text" id="fCategory" placeholder="e.g. Analgesic" list="catList" />
+            <datalist id="catList"></datalist>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Batch Number</label>
+            <input type="text" id="fBatch" placeholder="e.g. BT-2024A" />
+          </div>
+          <div class="field">
+            <label>Manufacturer</label>
+            <input type="text" id="fMfr" placeholder="e.g. Cipla Ltd." />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Expiry Date (Month/Year) *</label>
+            <input type="month" id="fExpiry" />
+          </div>
+          <div class="field">
+            <label>Quantity</label>
+            <input type="number" id="fQty" placeholder="0" min="0" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Unit Price (₹)</label>
+            <input type="number" id="fPrice" placeholder="0.00" min="0" step="0.01" />
+          </div>
+          <div class="field">
+            <label>Location / Rack</label>
+            <input type="text" id="fLocation" placeholder="e.g. Rack A-3" />
+          </div>
+        </div>
+        <div class="field" style="margin-top:4px">
+          <label>Notes</label>
+          <input type="text" id="fNotes" placeholder="Optional notes..." />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" onclick="saveMedicine()">Save Medicine</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/db.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/medicines.js"></script>
+</body>
+</html>
